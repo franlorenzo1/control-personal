@@ -17,6 +17,9 @@ const elements = {
   summaryExpenses: document.querySelector('#summary-expenses'),
   summaryRemaining: document.querySelector('#summary-remaining'),
   incomeList: document.querySelector('#income-list'),
+  summaryTotal: document.querySelector('#summary-total'),
+  summaryExpenses: document.querySelector('#summary-expenses'),
+  summaryRemaining: document.querySelector('#summary-remaining'),
   expensesList: document.querySelector('#expenses-list'),
   noteForm: document.querySelector('#note-form'),
   noteTitle: document.querySelector('#note-title'),
@@ -70,6 +73,26 @@ function loadState() {
     return normalizedState;
   } catch {
     return getDefaultState();
+function loadState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) {
+    return {
+      totalAmount: 0,
+      fixedExpenses: [],
+      notes: [],
+      passwords: [],
+    };
+  }
+
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {
+      totalAmount: 0,
+      fixedExpenses: [],
+      notes: [],
+      passwords: [],
+    };
   }
 }
 
@@ -91,6 +114,8 @@ function calculateExtraIncomes() {
 
 function calculateExpenses() {
   return state.fixedExpenses.reduce((acc, item) => acc + Number(item.monthlyAmount), 0);
+function calculateExpenses() {
+  return state.fixedExpenses.reduce((acc, item) => acc + Number(item.amount), 0);
 }
 
 function createListItem(content, onDelete) {
@@ -134,6 +159,17 @@ function renderFinance() {
   state.fixedExpenses.forEach((expense, index) => {
     const row = createListItem(
       `${expense.name}\nTotal: ${formatCurrency(expense.totalAmount)} | Cuotas: ${expense.installments} | Este período: ${formatCurrency(expense.monthlyAmount)}`,
+  const expensesTotal = calculateExpenses();
+  const remaining = state.totalAmount - expensesTotal;
+
+  elements.summaryTotal.textContent = formatCurrency(state.totalAmount);
+  elements.summaryExpenses.textContent = formatCurrency(expensesTotal);
+  elements.summaryRemaining.textContent = formatCurrency(remaining);
+
+  elements.expensesList.innerHTML = '';
+  state.fixedExpenses.forEach((expense, index) => {
+    const row = createListItem(
+      `${expense.name} — ${formatCurrency(expense.amount)}`,
       () => {
         state.fixedExpenses.splice(index, 1);
         saveState();
@@ -179,6 +215,7 @@ function attachEvents() {
   elements.incomeForm.addEventListener('submit', (event) => {
     event.preventDefault();
     state.baseAmount = Number(elements.totalAmount.value);
+    state.totalAmount = Number(elements.totalAmount.value);
     elements.incomeForm.reset();
     saveState();
     renderFinance();
@@ -192,6 +229,7 @@ function attachEvents() {
       amount: Number(elements.addMoney.value),
     });
 
+    state.totalAmount += Number(elements.addMoney.value);
     elements.addMoneyForm.reset();
     saveState();
     renderFinance();
@@ -213,6 +251,12 @@ function attachEvents() {
 
     elements.fixedExpenseForm.reset();
     elements.expenseInstallments.value = '1';
+    state.fixedExpenses.push({
+      name: elements.expenseName.value.trim(),
+      amount: Number(elements.expenseValue.value),
+    });
+
+    elements.fixedExpenseForm.reset();
     saveState();
     renderFinance();
   });
