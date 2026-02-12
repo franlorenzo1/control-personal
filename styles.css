@@ -73,6 +73,10 @@ button:hover {
   margin: 0.8rem 0;
 }
 
+.summary-grid--four {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .summary-grid article {
   background: #eff6ff;
   border-radius: 10px;
@@ -92,6 +96,7 @@ button:hover {
 .list {
   list-style: none;
   padding: 0;
+  margin: 0 0 0.9rem;
   margin: 0;
   display: grid;
   gap: 0.45rem;

@@ -17,6 +17,17 @@
         <h2>💸 Finanzas</h2>
 
         <form id="income-form" class="inline-form">
+          <label for="total-amount">Monto total inicial (ej: sueldo)</label>
+          <input id="total-amount" type="number" min="0" step="0.01" placeholder="Ej: 1500" required />
+          <button type="submit">Guardar monto inicial</button>
+        </form>
+
+        <form id="add-money-form" class="inline-form">
+          <label for="income-detail">Detalle del ingreso extra</label>
+          <input id="income-detail" type="text" placeholder="Ej: Changa / Transferencia" required />
+          <label for="add-money">Monto de ingreso extra</label>
+          <input id="add-money" type="number" min="0" step="0.01" placeholder="Ej: 200" required />
+          <button type="submit">Agregar ingreso</button>
           <label for="total-amount">Monto total inicial</label>
           <input id="total-amount" type="number" min="0" step="0.01" placeholder="Ej: 1500" required />
           <button type="submit">Guardar monto total</button>
@@ -31,6 +42,24 @@
         <form id="fixed-expense-form" class="inline-form">
           <label for="expense-name">Gasto fijo</label>
           <input id="expense-name" type="text" placeholder="Ej: Alquiler" required />
+          <label for="expense-value">Monto total</label>
+          <input id="expense-value" type="number" min="0" step="0.01" placeholder="Ej: 500" required />
+          <label for="expense-installments">Cuotas</label>
+          <input id="expense-installments" type="number" min="1" step="1" value="1" required />
+          <button type="submit">Agregar gasto</button>
+        </form>
+
+        <div class="summary-grid summary-grid--four">
+          <article>
+            <p>Monto inicial</p>
+            <strong id="summary-base">$0.00</strong>
+          </article>
+          <article>
+            <p>Ingresos extra</p>
+            <strong id="summary-extra">$0.00</strong>
+          </article>
+          <article>
+            <p>Gastos del período</p>
           <label for="expense-value">Monto</label>
           <input id="expense-value" type="number" min="0" step="0.01" placeholder="Ej: 500" required />
           <button type="submit">Agregar gasto</button>
@@ -51,6 +80,10 @@
           </article>
         </div>
 
+        <h3>Ingresos extra</h3>
+        <ul id="income-list" class="list"></ul>
+
+        <h3>Gastos fijos</h3>
         <ul id="expenses-list" class="list"></ul>
       </section>
 

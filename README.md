@@ -2,6 +2,7 @@
 
 Aplicación web simple para llevar control de:
 
+- Finanzas personales (monto inicial, ingresos extra, gastos fijos con cuotas y saldo restante)
 - Finanzas personales (monto total, sumar plata, gastos fijos y saldo restante)
 - Notas importantes
 - Contraseñas (guardadas localmente en tu navegador)
@@ -21,6 +22,13 @@ python3 -m http.server 8080
 
 ### Finanzas
 
+- **Monto inicial**: representa tu base (por ejemplo, sueldo).
+- **Ingresos extra**: permite agregar plata adicional con detalle (changa, transferencia, etc.).
+- **Gasto fijo**: permite registrar monto total y cantidad de cuotas.
+- El sistema calcula automáticamente:
+  - Monto inicial
+  - Total de ingresos extra
+  - Gastos del período (valor por cuota)
 - **Monto total inicial**: define tu plata base.
 - **Agregar plata**: suma ingresos nuevos.
 - **Gasto fijo**: agrega gastos (alquiler, internet, etc.).
