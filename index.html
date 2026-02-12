@@ -28,15 +28,6 @@
           <label for="add-money">Monto de ingreso extra</label>
           <input id="add-money" type="number" min="0" step="0.01" placeholder="Ej: 200" required />
           <button type="submit">Agregar ingreso</button>
-          <label for="total-amount">Monto total inicial</label>
-          <input id="total-amount" type="number" min="0" step="0.01" placeholder="Ej: 1500" required />
-          <button type="submit">Guardar monto total</button>
-        </form>
-
-        <form id="add-money-form" class="inline-form">
-          <label for="add-money">Agregar plata</label>
-          <input id="add-money" type="number" min="0" step="0.01" placeholder="Ej: 200" required />
-          <button type="submit">Sumar</button>
         </form>
 
         <form id="fixed-expense-form" class="inline-form">
@@ -60,18 +51,6 @@
           </article>
           <article>
             <p>Gastos del período</p>
-          <label for="expense-value">Monto</label>
-          <input id="expense-value" type="number" min="0" step="0.01" placeholder="Ej: 500" required />
-          <button type="submit">Agregar gasto</button>
-        </form>
-
-        <div class="summary-grid">
-          <article>
-            <p>Total disponible</p>
-            <strong id="summary-total">$0.00</strong>
-          </article>
-          <article>
-            <p>Gastos fijos</p>
             <strong id="summary-expenses">$0.00</strong>
           </article>
           <article>

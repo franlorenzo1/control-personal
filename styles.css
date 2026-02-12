@@ -97,7 +97,6 @@ button:hover {
   list-style: none;
   padding: 0;
   margin: 0 0 0.9rem;
-  margin: 0;
   display: grid;
   gap: 0.45rem;
 }
