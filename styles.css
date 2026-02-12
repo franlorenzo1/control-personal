@@ -1,0 +1,174 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  line-height: 1.45;
+}
+
+body {
+  margin: 0;
+  background: #f3f6fb;
+  color: #1f2a37;
+}
+
+.topbar {
+  background: linear-gradient(135deg, #243b53, #334e68);
+  color: #fff;
+  padding: 1.5rem;
+}
+
+.topbar h1 {
+  margin: 0;
+}
+
+.topbar p {
+  margin: 0.4rem 0 0;
+  opacity: 0.9;
+}
+
+.main-nav {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  text-decoration: none;
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.main-nav a.active {
+  background: #fff;
+  color: #243b53;
+}
+
+.layout {
+  padding: 1.2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.single-column {
+  grid-template-columns: minmax(280px, 860px);
+  justify-content: center;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  padding: 1rem;
+}
+
+.inline-form {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+}
+
+input,
+textarea,
+button {
+  padding: 0.58rem;
+  border-radius: 8px;
+  border: 1px solid #c9d4e3;
+  font: inherit;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+.summary-grid {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0.8rem 0;
+}
+
+.summary-grid--four {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.summary-grid article {
+  background: #eff6ff;
+  border-radius: 10px;
+  padding: 0.7rem;
+}
+
+.summary-grid p {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+.summary-grid strong {
+  display: block;
+  margin-top: 0.2rem;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.9rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.8rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 0.65rem;
+}
+
+.item-content {
+  white-space: pre-wrap;
+}
+
+.item-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.action-btn {
+  padding: 0.42rem 0.6rem;
+  min-width: 82px;
+}
+
+.edit-btn {
+  background: #0891b2;
+}
+
+.edit-btn:hover {
+  background: #0e7490;
+}
+
+.delete-btn {
+  background: #dc2626;
+}
+
+.delete-btn:hover {
+  background: #b91c1c;
+}
+
+.warning {
+  margin-top: -0.2rem;
+  font-size: 0.9rem;
+  color: #92400e;
+}

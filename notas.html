@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Control Personal - Notas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Panel de Control Personal</h1>
+      <p>Vista: Notas</p>
+      <nav class="main-nav">
+        <a href="index.html">Finanzas</a>
+        <a class="active" href="notas.html">Notas</a>
+        <a href="contrasenas.html">Contraseñas</a>
+      </nav>
+    </header>
+
+    <main class="layout single-column">
+      <section class="card">
+        <h2>📝 Notas rápidas</h2>
+        <form id="note-form" class="inline-form">
+          <label for="note-title">Título</label>
+          <input id="note-title" type="text" required placeholder="Ej: Idea de negocio" />
+          <label for="note-content">Contenido</label>
+          <textarea id="note-content" rows="3" required placeholder="Escribe tu nota..."></textarea>
+          <button type="submit">Guardar nota</button>
+        </form>
+        <ul id="notes-list" class="list"></ul>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
