@@ -1,5 +1,7 @@
 const STORAGE_KEY = 'controlPersonalData';
 
+const isStorageAvailable = checkStorageAvailability();
+const memoryFallback = getDefaultState();
 const state = loadState();
 
 const elements = {
@@ -29,6 +31,18 @@ const elements = {
   passwordSecret: document.querySelector('#password-secret'),
   passwordsList: document.querySelector('#passwords-list'),
 };
+
+
+function checkStorageAvailability() {
+  try {
+    const key = '__cp_test__';
+    localStorage.setItem(key, '1');
+    localStorage.removeItem(key);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 function getDefaultState() {
   return {
@@ -107,6 +121,10 @@ function normalizeExpense(expense) {
 }
 
 function loadState() {
+  if (!isStorageAvailable) {
+    return { ...memoryFallback };
+  }
+
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) {
     return getDefaultState();
@@ -149,6 +167,11 @@ function loadState() {
 }
 
 function saveState() {
+  if (!isStorageAvailable) {
+    Object.assign(memoryFallback, JSON.parse(JSON.stringify(state)));
+    return;
+  }
+
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
@@ -438,6 +461,10 @@ function attachEvents() {
       renderPasswords();
     });
   }
+}
+
+if (!isStorageAvailable) {
+  console.warn('localStorage no está disponible en este navegador/contexto.');
 }
 
 attachEvents();
