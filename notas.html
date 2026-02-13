@@ -3,33 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Control Personal - Contraseñas</title>
+    <title>Control Personal - Notas</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="topbar">
       <h1>Panel de Control Personal</h1>
-      <p>Vista: Contraseñas</p>
+      <p>Vista: Notas</p>
       <nav class="main-nav">
-        <a href="finanzas.html">Finanzas</a>
-        <a href="notas.html">Notas</a>
+        <a href="./finanzas.html">Finanzas</a>
+        <a href="./contrasenas.html">Contraseñas</a>
       </nav>
     </header>
 
     <main class="layout single-column">
       <section class="card">
-        <h2>🔐 Contraseñas (local)</h2>
-        <p class="warning">Esto se guarda en tu navegador. Para producción deberías cifrar los datos y usar backend seguro.</p>
-        <form id="password-form" class="inline-form">
-          <label for="password-service">Servicio</label>
-          <input id="password-service" type="text" required placeholder="Ej: Gmail" />
-          <label for="password-user">Usuario</label>
-          <input id="password-user" type="text" required placeholder="Ej: tu@email.com" />
-          <label for="password-secret">Contraseña</label>
-          <input id="password-secret" type="text" required placeholder="Ej: ******" />
-          <button type="submit">Guardar acceso</button>
+        <h2>📝 Notas rápidas</h2>
+        <form id="note-form" class="inline-form">
+          <label for="note-title">Título</label>
+          <input id="note-title" type="text" required placeholder="Ej: Idea de negocio" />
+          <label for="note-content">Contenido</label>
+          <textarea id="note-content" rows="3" required placeholder="Escribe tu nota..."></textarea>
+          <button type="submit">Guardar nota</button>
         </form>
-        <ul id="passwords-list" class="list"></ul>
+        <ul id="notes-list" class="list"></ul>
       </section>
     </main>
 

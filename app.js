@@ -4,6 +4,9 @@ const isStorageAvailable = checkStorageAvailability();
 const memoryFallback = getDefaultState();
 const state = loadState();
 
+let editingNoteIndex = null;
+let editingPasswordIndex = null;
+
 const elements = {
   incomeForm: document.querySelector('#income-form'),
   totalAmount: document.querySelector('#total-amount'),
@@ -31,7 +34,6 @@ const elements = {
   passwordSecret: document.querySelector('#password-secret'),
   passwordsList: document.querySelector('#passwords-list'),
 };
-
 
 function checkStorageAvailability() {
   try {
@@ -198,6 +200,15 @@ function calculateMonthlyActiveExpenses() {
   }, 0);
 }
 
+function createActionButton(label, className, onClick) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = `action-btn ${className || ''}`.trim();
+  button.textContent = label;
+  button.addEventListener('click', onClick);
+  return button;
+}
+
 function createListItem(content, actions) {
   const row = document.createElement('li');
   row.className = 'item-row';
@@ -210,12 +221,7 @@ function createListItem(content, actions) {
   actionsEl.className = 'item-actions';
 
   actions.forEach((action) => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = `action-btn ${action.className || ''}`.trim();
-    button.textContent = action.label;
-    button.addEventListener('click', action.onClick);
-    actionsEl.appendChild(button);
+    actionsEl.appendChild(createActionButton(action.label, action.className, action.onClick));
   });
 
   row.append(contentEl, actionsEl);
@@ -277,27 +283,6 @@ function renderFinance() {
   });
 }
 
-function editNote(index) {
-  const note = state.notes[index];
-  const newTitle = prompt('Editar título de la nota:', note.title);
-  if (newTitle === null) {
-    return;
-  }
-
-  const newContent = prompt('Editar contenido de la nota:', note.content);
-  if (newContent === null) {
-    return;
-  }
-
-  state.notes[index] = {
-    title: newTitle.trim() || note.title,
-    content: newContent.trim() || note.content,
-  };
-
-  saveState();
-  renderNotes();
-}
-
 function renderNotes() {
   if (!elements.notesList) {
     return;
@@ -306,52 +291,72 @@ function renderNotes() {
   elements.notesList.innerHTML = '';
 
   state.notes.forEach((note, index) => {
-    const row = createListItem(`${note.title}\n${note.content}`, [
-      {
-        label: 'Editar',
-        className: 'edit-btn',
-        onClick: () => editNote(index),
-      },
-      {
-        label: 'Eliminar',
-        className: 'delete-btn',
-        onClick: () => {
-          state.notes.splice(index, 1);
+    const row = document.createElement('li');
+    row.className = 'item-row';
+
+    const actionsEl = document.createElement('div');
+    actionsEl.className = 'item-actions';
+
+    if (editingNoteIndex === index) {
+      const editor = document.createElement('div');
+      editor.className = 'inline-form edit-inline';
+
+      const titleInput = document.createElement('input');
+      titleInput.type = 'text';
+      titleInput.value = note.title;
+
+      const contentInput = document.createElement('textarea');
+      contentInput.rows = 3;
+      contentInput.value = note.content;
+
+      editor.append(titleInput, contentInput);
+
+      actionsEl.appendChild(
+        createActionButton('Guardar', '', () => {
+          state.notes[index] = {
+            title: titleInput.value.trim() || note.title,
+            content: contentInput.value.trim() || note.content,
+          };
+          editingNoteIndex = null;
           saveState();
           renderNotes();
-        },
-      },
-    ]);
+        })
+      );
+      actionsEl.appendChild(
+        createActionButton('Cancelar', 'edit-btn', () => {
+          editingNoteIndex = null;
+          renderNotes();
+        })
+      );
+
+      row.append(editor, actionsEl);
+    } else {
+      const contentEl = document.createElement('div');
+      contentEl.className = 'item-content';
+      contentEl.textContent = `${note.title}\n${note.content}`;
+
+      actionsEl.appendChild(
+        createActionButton('Editar', 'edit-btn', () => {
+          editingNoteIndex = index;
+          renderNotes();
+        })
+      );
+      actionsEl.appendChild(
+        createActionButton('Eliminar', 'delete-btn', () => {
+          state.notes.splice(index, 1);
+          if (editingNoteIndex === index) {
+            editingNoteIndex = null;
+          }
+          saveState();
+          renderNotes();
+        })
+      );
+
+      row.append(contentEl, actionsEl);
+    }
 
     elements.notesList.appendChild(row);
   });
-}
-
-function editPassword(index) {
-  const entry = state.passwords[index];
-  const service = prompt('Editar servicio:', entry.service);
-  if (service === null) {
-    return;
-  }
-
-  const user = prompt('Editar usuario:', entry.user);
-  if (user === null) {
-    return;
-  }
-
-  const secret = prompt('Editar contraseña:', entry.secret);
-  if (secret === null) {
-    return;
-  }
-
-  state.passwords[index] = {
-    service: service.trim() || entry.service,
-    user: user.trim() || entry.user,
-    secret: secret.trim() || entry.secret,
-  };
-
-  saveState();
-  renderPasswords();
 }
 
 function renderPasswords() {
@@ -362,22 +367,74 @@ function renderPasswords() {
   elements.passwordsList.innerHTML = '';
 
   state.passwords.forEach((entry, index) => {
-    const row = createListItem(`${entry.service}\nUsuario: ${entry.user}\nClave: ${entry.secret}`, [
-      {
-        label: 'Editar',
-        className: 'edit-btn',
-        onClick: () => editPassword(index),
-      },
-      {
-        label: 'Eliminar',
-        className: 'delete-btn',
-        onClick: () => {
-          state.passwords.splice(index, 1);
+    const row = document.createElement('li');
+    row.className = 'item-row';
+
+    const actionsEl = document.createElement('div');
+    actionsEl.className = 'item-actions';
+
+    if (editingPasswordIndex === index) {
+      const editor = document.createElement('div');
+      editor.className = 'inline-form edit-inline';
+
+      const serviceInput = document.createElement('input');
+      serviceInput.type = 'text';
+      serviceInput.value = entry.service;
+
+      const userInput = document.createElement('input');
+      userInput.type = 'text';
+      userInput.value = entry.user;
+
+      const secretInput = document.createElement('input');
+      secretInput.type = 'text';
+      secretInput.value = entry.secret;
+
+      editor.append(serviceInput, userInput, secretInput);
+
+      actionsEl.appendChild(
+        createActionButton('Guardar', '', () => {
+          state.passwords[index] = {
+            service: serviceInput.value.trim() || entry.service,
+            user: userInput.value.trim() || entry.user,
+            secret: secretInput.value.trim() || entry.secret,
+          };
+          editingPasswordIndex = null;
           saveState();
           renderPasswords();
-        },
-      },
-    ]);
+        })
+      );
+      actionsEl.appendChild(
+        createActionButton('Cancelar', 'edit-btn', () => {
+          editingPasswordIndex = null;
+          renderPasswords();
+        })
+      );
+
+      row.append(editor, actionsEl);
+    } else {
+      const contentEl = document.createElement('div');
+      contentEl.className = 'item-content';
+      contentEl.textContent = `${entry.service}\nUsuario: ${entry.user}\nClave: ${entry.secret}`;
+
+      actionsEl.appendChild(
+        createActionButton('Editar', 'edit-btn', () => {
+          editingPasswordIndex = index;
+          renderPasswords();
+        })
+      );
+      actionsEl.appendChild(
+        createActionButton('Eliminar', 'delete-btn', () => {
+          state.passwords.splice(index, 1);
+          if (editingPasswordIndex === index) {
+            editingPasswordIndex = null;
+          }
+          saveState();
+          renderPasswords();
+        })
+      );
+
+      row.append(contentEl, actionsEl);
+    }
 
     elements.passwordsList.appendChild(row);
   });
