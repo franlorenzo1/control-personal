@@ -15,10 +15,7 @@ const elements = {
   addMoney: document.querySelector('#add-money'),
   fixedExpenseForm: document.querySelector('#fixed-expense-form'),
   expenseName: document.querySelector('#expense-name'),
-  expenseType: document.querySelector('#expense-type'),
-  expenseValueLabel: document.querySelector('#expense-value-label'),
   expenseValue: document.querySelector('#expense-value'),
-  expenseInstallmentsWrap: document.querySelector('#expense-installments-wrap'),
   expenseInstallments: document.querySelector('#expense-installments'),
   expenseFirstDebit: document.querySelector('#expense-first-debit'),
   summaryBase: document.querySelector('#summary-base'),
@@ -95,21 +92,10 @@ function getExpenseStatus(expense) {
       remainingInstallments: expense.installments,
       endMonth: expense.firstDebitMonth,
       isActiveThisMonth: false,
-      isMonthly: expense.type === 'monthly',
     };
   }
 
   const currentIndex = toMonthIndex(getCurrentMonthString());
-
-  if (expense.type === 'monthly') {
-    return {
-      remainingInstallments: null,
-      endMonth: null,
-      isActiveThisMonth: currentIndex >= firstDebitIndex,
-      isMonthly: true,
-    };
-  }
-
   const endIndex = firstDebitIndex + expense.installments - 1;
   const paidInstallments = Math.max(0, Math.min(expense.installments, currentIndex - firstDebitIndex + 1));
   const remainingInstallments = expense.installments - paidInstallments;
@@ -119,26 +105,19 @@ function getExpenseStatus(expense) {
     remainingInstallments,
     endMonth: monthFromIndex(endIndex),
     isActiveThisMonth,
-    isMonthly: false,
   };
 }
 
 function normalizeExpense(expense) {
-  const type = expense.type === 'monthly' ? 'monthly' : 'installments';
-  const totalAmount = Number(expense.totalAmount ?? expense.amount ?? expense.monthlyAmount ?? 0);
-  const installments = type === 'installments' ? Number(expense.installments ?? 1) || 1 : 1;
+  const totalAmount = Number(expense.totalAmount ?? expense.amount ?? 0);
+  const installments = Number(expense.installments ?? 1) || 1;
   const firstDebitMonth = expense.firstDebitMonth || getCurrentMonthString();
-  const monthlyAmount =
-    type === 'monthly'
-      ? Number(expense.monthlyAmount ?? totalAmount)
-      : Number(expense.monthlyAmount ?? totalAmount / installments);
 
   return {
     name: expense.name || 'Gasto sin nombre',
-    type,
     totalAmount,
     installments,
-    monthlyAmount,
+    monthlyAmount: totalAmount / installments,
     firstDebitMonth,
   };
 }
@@ -249,29 +228,6 @@ function createListItem(content, actions) {
   return row;
 }
 
-function updateExpenseFormByType() {
-  if (!elements.expenseType) {
-    return;
-  }
-
-  const isMonthly = elements.expenseType.value === 'monthly';
-
-  if (elements.expenseValueLabel) {
-    elements.expenseValueLabel.textContent = isMonthly ? 'Monto mensual' : 'Monto total';
-  }
-
-  if (elements.expenseInstallmentsWrap) {
-    elements.expenseInstallmentsWrap.style.display = isMonthly ? 'none' : 'grid';
-  }
-
-  if (elements.expenseInstallments) {
-    elements.expenseInstallments.required = !isMonthly;
-    if (isMonthly) {
-      elements.expenseInstallments.value = '1';
-    }
-  }
-}
-
 function renderFinance() {
   if (!elements.summaryBase) {
     return;
@@ -307,22 +263,21 @@ function renderFinance() {
   elements.expensesList.innerHTML = '';
   state.fixedExpenses.forEach((expense, index) => {
     const status = getExpenseStatus(expense);
-    const description =
-      expense.type === 'monthly'
-        ? `${expense.name}\nTipo: Mensual | Monto mensual: ${formatCurrency(expense.monthlyAmount)}\nPrimer débito: ${formatMonth(expense.firstDebitMonth)} | Finaliza: Sin fin`
-        : `${expense.name}\nTipo: Cuotas | Total: ${formatCurrency(expense.totalAmount)} | Cuotas: ${expense.installments}\nPrimer débito: ${formatMonth(expense.firstDebitMonth)} | Termina: ${formatMonth(status.endMonth)}\nCuotas restantes: ${status.remainingInstallments}`;
 
-    const row = createListItem(description, [
-      {
-        label: 'Eliminar',
-        className: 'delete-btn',
-        onClick: () => {
-          state.fixedExpenses.splice(index, 1);
-          saveState();
-          renderFinance();
+    const row = createListItem(
+      `${expense.name}\nTotal: ${formatCurrency(expense.totalAmount)} | Cuotas: ${expense.installments}\nPrimer débito: ${formatMonth(expense.firstDebitMonth)} | Termina: ${formatMonth(status.endMonth)}\nCuotas restantes: ${status.remainingInstallments}`,
+      [
+        {
+          label: 'Eliminar',
+          className: 'delete-btn',
+          onClick: () => {
+            state.fixedExpenses.splice(index, 1);
+            saveState();
+            renderFinance();
+          },
         },
-      },
-    ]);
+      ]
+    );
 
     elements.expensesList.appendChild(row);
   });
@@ -486,11 +441,6 @@ function renderPasswords() {
 }
 
 function attachEvents() {
-  if (elements.expenseType) {
-    elements.expenseType.addEventListener('change', updateExpenseFormByType);
-    updateExpenseFormByType();
-  }
-
   if (elements.incomeForm) {
     elements.incomeForm.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -520,27 +470,19 @@ function attachEvents() {
     elements.fixedExpenseForm.addEventListener('submit', (event) => {
       event.preventDefault();
 
-      const type = elements.expenseType?.value === 'monthly' ? 'monthly' : 'installments';
-      const amount = Number(elements.expenseValue.value);
-      const installments = type === 'monthly' ? 1 : Number(elements.expenseInstallments.value);
+      const totalAmount = Number(elements.expenseValue.value);
+      const installments = Number(elements.expenseInstallments.value);
 
       state.fixedExpenses.push({
         name: elements.expenseName.value.trim(),
-        type,
-        totalAmount: type === 'monthly' ? amount : amount,
+        totalAmount,
         installments,
-        monthlyAmount: type === 'monthly' ? amount : amount / installments,
+        monthlyAmount: totalAmount / installments,
         firstDebitMonth: elements.expenseFirstDebit.value,
       });
 
       elements.fixedExpenseForm.reset();
-      if (elements.expenseType) {
-        elements.expenseType.value = 'installments';
-      }
-      if (elements.expenseInstallments) {
-        elements.expenseInstallments.value = '1';
-      }
-      updateExpenseFormByType();
+      elements.expenseInstallments.value = '1';
       saveState();
       renderFinance();
     });
