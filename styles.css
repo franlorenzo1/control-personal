@@ -199,15 +199,3 @@ button:hover {
   font-size: 0.9rem;
   color: #92400e;
 }
-
-
-.edit-inline {
-  width: 100%;
-  margin-bottom: 0;
-}
-
-.edit-inline input,
-.edit-inline textarea {
-  width: 100%;
-  box-sizing: border-box;
-}
