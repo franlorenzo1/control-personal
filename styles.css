@@ -98,8 +98,14 @@ body {
   margin-bottom: 0.9rem;
 }
 
+.inline-form-group {
+  display: grid;
+  gap: 0.4rem;
+}
+
 input,
 textarea,
+select,
 button {
   padding: 0.58rem;
   border-radius: 8px;

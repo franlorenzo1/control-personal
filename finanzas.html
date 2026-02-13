@@ -37,10 +37,17 @@
         <form id="fixed-expense-form" class="inline-form">
           <label for="expense-name">Gasto fijo</label>
           <input id="expense-name" type="text" placeholder="Ej: Alquiler" required />
-          <label for="expense-value">Monto total</label>
+          <label for="expense-type">Tipo de gasto</label>
+          <select id="expense-type" required>
+            <option value="installments">En cuotas</option>
+            <option value="monthly">Mensual</option>
+          </select>
+          <label for="expense-value" id="expense-value-label">Monto total</label>
           <input id="expense-value" type="number" min="0" step="0.01" placeholder="Ej: 500" required />
-          <label for="expense-installments">Cuotas</label>
-          <input id="expense-installments" type="number" min="1" step="1" value="1" required />
+          <div id="expense-installments-wrap" class="inline-form-group">
+            <label for="expense-installments">Cuotas</label>
+            <input id="expense-installments" type="number" min="1" step="1" value="1" required />
+          </div>
           <label for="expense-first-debit">Mes de primer débito</label>
           <input id="expense-first-debit" type="month" required />
           <button type="submit">Agregar gasto</button>
