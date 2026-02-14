@@ -16,7 +16,7 @@ Aplicación web simple para llevar control de:
 Regla de navegación:
 
 - La vista principal tiene 3 accesos (uno por sección).
-- Cada sección tiene enlaces a las otras 2 secciones.
+- Cada sección muestra también los 3 enlaces (Finanzas, Notas y Contraseñas), marcando la vista actual.
 
 ## Cómo usarla
 

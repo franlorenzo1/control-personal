@@ -10,6 +10,7 @@ let editingPasswordIndex = null;
 const elements = {
   incomeForm: document.querySelector('#income-form'),
   totalAmount: document.querySelector('#total-amount'),
+  saveBaseAmountBtn: document.querySelector('#save-base-amount-btn'),
   addMoneyForm: document.querySelector('#add-money-form'),
   incomeDetail: document.querySelector('#income-detail'),
   addMoney: document.querySelector('#add-money'),
@@ -270,6 +271,14 @@ function updateExpenseFormByType() {
       elements.expenseInstallments.value = '1';
     }
   }
+
+  if (elements.expenseFirstDebit) {
+    elements.expenseFirstDebit.required = !isMonthly;
+    elements.expenseFirstDebit.disabled = isMonthly;
+    if (isMonthly) {
+      elements.expenseFirstDebit.value = '';
+    }
+  }
 }
 
 function renderFinance() {
@@ -283,6 +292,9 @@ function renderFinance() {
   const remaining = available - monthlyExpensesTotal;
 
   elements.summaryBase.textContent = formatCurrency(state.baseAmount);
+  if (elements.totalAmount) {
+    elements.totalAmount.value = state.baseAmount > 0 ? state.baseAmount : '';
+  }
   elements.summaryExtra.textContent = formatCurrency(extraIncomesTotal);
   elements.summaryExpenses.textContent = formatCurrency(monthlyExpensesTotal);
   elements.summaryRemaining.textContent = formatCurrency(remaining);
@@ -495,7 +507,6 @@ function attachEvents() {
     elements.incomeForm.addEventListener('submit', (event) => {
       event.preventDefault();
       state.baseAmount = Number(elements.totalAmount.value);
-      elements.incomeForm.reset();
       saveState();
       renderFinance();
     });
@@ -530,7 +541,8 @@ function attachEvents() {
         totalAmount: type === 'monthly' ? amount : amount,
         installments,
         monthlyAmount: type === 'monthly' ? amount : amount / installments,
-        firstDebitMonth: elements.expenseFirstDebit.value,
+        firstDebitMonth:
+          type === 'monthly' ? getCurrentMonthString() : (elements.expenseFirstDebit.value || getCurrentMonthString()),
       });
 
       elements.fixedExpenseForm.reset();
