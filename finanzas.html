@@ -11,7 +11,6 @@
       <h1>Panel de Control Personal</h1>
       <p>Vista: Finanzas</p>
       <nav class="main-nav">
-        <a href="./finanzas.html" class="active">Finanzas</a>
         <a href="./notas.html">Notas</a>
         <a href="./contrasenas.html">Contraseñas</a>
       </nav>
@@ -24,7 +23,7 @@
         <form id="income-form" class="inline-form">
           <label for="total-amount">Monto total inicial (ej: sueldo)</label>
           <input id="total-amount" type="number" min="0" step="0.01" placeholder="Ej: 1500" required />
-          <button type="submit" id="save-base-amount-btn">Guardar / Editar monto inicial</button>
+          <button type="submit">Guardar monto inicial</button>
         </form>
 
         <form id="add-money-form" class="inline-form">
@@ -50,7 +49,7 @@
             <input id="expense-installments" type="number" min="1" step="1" value="1" required />
           </div>
           <label for="expense-first-debit">Mes de primer débito</label>
-          <input id="expense-first-debit" type="month" />
+          <input id="expense-first-debit" type="month" required />
           <button type="submit">Agregar gasto</button>
         </form>
 
