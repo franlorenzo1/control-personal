@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Control Personal - Finanzas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Panel de Control Personal</h1>
+      <p>Vista: Finanzas</p>
+      <nav class="main-nav">
+        <a href="./finanzas.html" class="active">Finanzas</a>
+        <a href="./notas.html">Notas</a>
+        <a href="./contrasenas.html">Contraseñas</a>
+      </nav>
+    </header>
+
+    <main class="layout single-column">
+      <section class="card" id="finanzas-card">
+        <h2>💸 Finanzas</h2>
+
+        <form id="income-form" class="inline-form">
+          <label for="total-amount">Monto total inicial (ej: sueldo)</label>
+          <input id="total-amount" type="number" min="0" step="0.01" placeholder="Ej: 1500" required />
+          <button type="submit" id="save-base-amount-btn">Guardar / Editar monto inicial</button>
+        </form>
+
+        <form id="add-money-form" class="inline-form">
+          <label for="income-detail">Detalle del ingreso extra</label>
+          <input id="income-detail" type="text" placeholder="Ej: Changa / Transferencia" required />
+          <label for="add-money">Monto de ingreso extra</label>
+          <input id="add-money" type="number" min="0" step="0.01" placeholder="Ej: 200" required />
+          <button type="submit">Agregar ingreso</button>
+        </form>
+
+        <form id="fixed-expense-form" class="inline-form">
+          <label for="expense-name">Gasto fijo</label>
+          <input id="expense-name" type="text" placeholder="Ej: Alquiler" required />
+          <label for="expense-type">Tipo de gasto</label>
+          <select id="expense-type" required>
+            <option value="installments">En cuotas</option>
+            <option value="monthly">Mensual</option>
+          </select>
+          <label for="expense-value" id="expense-value-label">Monto total</label>
+          <input id="expense-value" type="number" min="0" step="0.01" placeholder="Ej: 500" required />
+          <div id="expense-installments-wrap" class="inline-form-group">
+            <label for="expense-installments">Cuotas</label>
+            <input id="expense-installments" type="number" min="1" step="1" value="1" required />
+          </div>
+          <label for="expense-first-debit">Mes de primer débito</label>
+          <input id="expense-first-debit" type="month" />
+          <button type="submit">Agregar gasto</button>
+        </form>
+
+        <div class="summary-grid summary-grid--four">
+          <article>
+            <p>Monto inicial</p>
+            <strong id="summary-base">$0.00</strong>
+          </article>
+          <article>
+            <p>Ingresos extra</p>
+            <strong id="summary-extra">$0.00</strong>
+          </article>
+          <article>
+            <p>Gastos mensuales vigentes</p>
+            <strong id="summary-expenses">$0.00</strong>
+          </article>
+          <article>
+            <p>Dinero para usar</p>
+            <strong id="summary-remaining">$0.00</strong>
+          </article>
+        </div>
+
+        <h3>Ingresos extra</h3>
+        <ul id="income-list" class="list"></ul>
+
+        <h3>Gastos fijos</h3>
+        <ul id="expenses-list" class="list"></ul>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
