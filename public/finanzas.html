@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Seguí tus ingresos y gastos mensuales con el panel de finanzas personales." />
+  <meta name="theme-color" content="#243b53" />
+  <title>Control Personal - Finanzas</title>
+  <link rel="icon" href="./favicon.svg" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-row">
+      <div>
+        <h1>Panel de Control Personal</h1>
+        <p>Vista: Finanzas</p>
+      </div>
+    </div>
+    <nav class="main-nav">
+      <a href="./finanzas.html" class="active">💸 Finanzas</a>
+      <a href="./notas.html">📝 Notas</a>
+      <a href="./contrasenas.html">🔐 Contraseñas</a>
+    </nav>
+    <div class="data-btns">
+      <button class="data-btn export-btn">⬇️ Exportar datos</button>
+      <button class="data-btn import-btn">⬆️ Importar datos</button>
+    </div>
+  </header>
+
+  <input type="file" id="import-file" accept=".json" style="display:none" />
+
+  <main class="layout single-column">
+    <section class="card" id="finanzas-card">
+      <h2>💸 Finanzas</h2>
+
+      <form id="income-form" class="inline-form">
+        <label for="total-amount">Monto total inicial (ej: sueldo)</label>
+        <input id="total-amount" type="number" min="0" step="0.01" placeholder="Ej: 1500" required />
+        <button type="submit" id="save-base-amount-btn">Guardar / Editar monto inicial</button>
+      </form>
+
+      <form id="add-money-form" class="inline-form">
+        <label for="income-detail">Detalle del ingreso extra</label>
+        <input id="income-detail" type="text" placeholder="Ej: Changa / Transferencia" required />
+        <label for="add-money">Monto de ingreso extra</label>
+        <input id="add-money" type="number" min="0" step="0.01" placeholder="Ej: 200" required />
+        <button type="submit">Agregar ingreso</button>
+      </form>
+
+      <form id="fixed-expense-form" class="inline-form">
+        <label for="expense-name">Gasto fijo</label>
+        <input id="expense-name" type="text" placeholder="Ej: Alquiler" required />
+        <label for="expense-type">Tipo de gasto</label>
+        <select id="expense-type" required>
+          <option value="installments">En cuotas</option>
+          <option value="monthly">Mensual</option>
+        </select>
+        <label for="expense-value" id="expense-value-label">Monto total</label>
+        <input id="expense-value" type="number" min="0" step="0.01" placeholder="Ej: 500" required />
+        <div id="expense-installments-wrap" class="inline-form-group">
+          <label for="expense-installments">Cuotas</label>
+          <input id="expense-installments" type="number" min="1" step="1" value="1" required />
+        </div>
+        <label for="expense-first-debit">Mes de primer débito</label>
+        <input id="expense-first-debit" type="month" />
+        <button type="submit">Agregar gasto</button>
+      </form>
+
+      <div class="summary-grid summary-grid--four">
+        <article>
+          <p>Monto inicial</p>
+          <strong id="summary-base">$0.00</strong>
+        </article>
+        <article>
+          <p>Ingresos extra</p>
+          <strong id="summary-extra">$0.00</strong>
+        </article>
+        <article>
+          <p>Gastos vigentes este mes</p>
+          <strong id="summary-expenses">$0.00</strong>
+        </article>
+        <article>
+          <p>Dinero para usar</p>
+          <strong id="summary-remaining">$0.00</strong>
+        </article>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label" id="progress-label">Gastos: 0% del ingreso disponible</div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <h3>Ingresos extra</h3>
+      <ul id="income-list" class="list"></ul>
+
+      <h3>Gastos fijos</h3>
+      <ul id="expenses-list" class="list"></ul>
+
+      <h3>
+        💳 Gastos puntuales
+        <span id="one-time-total"
+          style="font-size:0.82rem;font-weight:400;color:var(--text-muted);margin-left:0.3rem;"></span>
+      </h3>
+      <p style="margin-top:-0.4rem;font-size:0.88rem;color:var(--text-muted);">
+        Registrá cualquier gasto que no sea mensual ni en cuotas: transferencias, compras, pagos sueltos, etc.
+      </p>
+      <form id="one-time-form" class="inline-form">
+        <label for="one-time-detail">Descripción del gasto</label>
+        <input id="one-time-detail" type="text" placeholder="Ej: Transferencia ahorro, supermercado..." required />
+        <label for="one-time-amount">Monto</label>
+        <input id="one-time-amount" type="number" min="0" step="0.01" placeholder="Ej: 3500" required />
+        <button type="submit">Registrar gasto puntual</button>
+      </form>
+      <ul id="one-time-list" class="list"></ul>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
