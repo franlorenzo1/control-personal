@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Guardá tus notas rápidas en el navegador de forma local y segura." />
+  <meta name="theme-color" content="#243b53" />
+  <title>Control Personal - Notas</title>
+  <link rel="icon" href="./favicon.svg" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-row">
+      <div>
+        <h1>Panel de Control Personal</h1>
+        <p>Vista: Notas</p>
+      </div>
+    </div>
+    <nav class="main-nav">
+      <a href="./finanzas.html">💸 Finanzas</a>
+      <a href="./notas.html" class="active">📝 Notas</a>
+      <a href="./contrasenas.html">🔐 Contraseñas</a>
+    </nav>
+    <div class="data-btns">
+      <button class="data-btn export-btn">⬇️ Exportar datos</button>
+      <button class="data-btn import-btn">⬆️ Importar datos</button>
+    </div>
+  </header>
+
+  <input type="file" id="import-file" accept=".json" style="display:none" />
+
+  <main class="layout single-column">
+    <section class="card">
+      <h2>📝 Notas rápidas</h2>
+      <form id="note-form" class="inline-form">
+        <label for="note-title">Título</label>
+        <input id="note-title" type="text" required placeholder="Ej: Idea de negocio" />
+        <label for="note-content">Contenido</label>
+        <textarea id="note-content" rows="3" required placeholder="Escribe tu nota..."></textarea>
+        <button type="submit">Guardar nota</button>
+      </form>
+      <div class="search-wrap">
+        <input id="notes-search" class="search-input" type="search"
+          placeholder="🔍 Buscar notas por título o contenido..." />
+      </div>
+      <ul id="notes-list" class="list"></ul>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

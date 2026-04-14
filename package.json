@@ -1,0 +1,80 @@
+{
+  "name": "control-personal",
+  "version": "1.0.0",
+  "description": "Aplicación personal para controlar finanzas, notas y contraseñas.",
+  "main": "electron.js",
+  "scripts": {
+    "start": "node server.js",
+    "electron": "electron .",
+    "dist:win": "node build.js",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux",
+    "rebuild": "electron-builder install-app-deps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/franlorenzo1/control-personal.git"
+  },
+  "keywords": [],
+  "author": "franlorenzo1",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/franlorenzo1/control-personal/issues"
+  },
+  "homepage": "https://github.com/franlorenzo1/control-personal#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.franlorenzo.control-personal",
+    "productName": "Control Personal",
+    "asar": false,
+    "directories": {
+      "output": "dist-app"
+    },
+    "files": [
+      "electron.js",
+      "server.js",
+      "database.js",
+      "public/**/*",
+      "node_modules/**/*",
+      "!node_modules/.cache/**",
+      "!dist-app/**"
+    ],
+    "win": {
+      "sign": null,
+      "signingHashAlgorithms": null,
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.finance"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Control Personal - Login</title>
+  <link rel="icon" href="./favicon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 4rem auto;
+      text-align: center;
+    }
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .toggle-auth {
+      margin-top: 1rem;
+      color: #2563eb;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="layout single-column">
+    <section class="card login-container">
+      <h2 id="auth-title">Inicia Sesión</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem">Para acceder a tus finanzas y notas de forma segura.</p>
+      
+      <form id="auth-form" class="login-form">
+        <div class="inline-form-group" style="text-align: left;">
+          <label for="username">Usuario</label>
+          <input type="text" id="username" required placeholder="Ingresa tu usuario">
+        </div>
+        <div class="inline-form-group" style="text-align: left;">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" required placeholder="Ingresa tu contraseña">
+        </div>
+        <button type="submit" id="auth-submit">Entrar</button>
+      </form>
+      <div id="auth-error" class="warning" style="margin-top: 1rem; display: none;"></div>
+      
+      <p class="toggle-auth" id="toggle-auth-btn">¿No tienes cuenta? Regístrate</p>
+    </section>
+  </main>
+  
+  <script>
+    const token = localStorage.getItem('cp_token');
+    if (token) {
+      window.location.href = './index.html';
+    }
+
+    let isLogin = true;
+    const title = document.getElementById('auth-title');
+    const submitBtn = document.getElementById('auth-submit');
+    const toggleBtn = document.getElementById('toggle-auth-btn');
+    const errorDiv = document.getElementById('auth-error');
+
+    toggleBtn.addEventListener('click', () => {
+      isLogin = !isLogin;
+      title.textContent = isLogin ? 'Inicia Sesión' : 'Crea tu Cuenta';
+      submitBtn.textContent = isLogin ? 'Entrar' : 'Registrarse';
+      toggleBtn.textContent = isLogin ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia Sesión';
+      errorDiv.style.display = 'none';
+    });
+
+    document.getElementById('auth-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      const endpoint = isLogin ? '/api/login' : '/api/register';
+      
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        
+        if (!res.ok) {
+          errorDiv.textContent = data.error || 'Error en la autenticación';
+          errorDiv.style.display = 'block';
+          return;
+        }
+
+        if (isLogin) {
+          localStorage.setItem('cp_token', data.token);
+          window.location.href = './index.html';
+        } else {
+          // Switch to login
+          document.getElementById('password').value = '';
+          toggleBtn.click();
+          errorDiv.style.color = '#059669';
+          errorDiv.textContent = '¡Cuenta creada! Ahora inicia sesión.';
+          errorDiv.style.display = 'block';
+          setTimeout(() => { errorDiv.style.color = ''; }, 3000);
+        }
+      } catch (err) {
+        errorDiv.textContent = 'Error conectando al servidor.';
+        errorDiv.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
