@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Controlá tus finanzas, notas y contraseñas de forma local en tu navegador." />
+  <meta name="theme-color" content="#243b53" />
+  <title>Control Personal - Inicio</title>
+  <link rel="icon" href="./favicon.svg" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-row">
+      <div>
+        <h1>Panel de Control Personal</h1>
+        <p>Inicio</p>
+      </div>
+    </div>
+    <div class="data-btns">
+      <button class="data-btn export-btn">⬇️ Exportar datos</button>
+      <button class="data-btn import-btn">⬆️ Importar datos</button>
+    </div>
+  </header>
+
+  <input type="file" id="import-file" accept=".json" style="display:none" />
+
+  <main class="layout single-column">
+    <section class="card">
+      <h2>🏠 Elegí una sección</h2>
+      <p class="home-text">Entrá a la sección que quieras usar:</p>
+      <nav class="home-nav">
+        <a href="./finanzas.html">💸 Finanzas</a>
+        <a href="./notas.html">📝 Notas</a>
+        <a href="./contrasenas.html">🔐 Contraseñas</a>
+      </nav>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
